@@ -21,6 +21,31 @@ namespace WebApplication3
             if(!IsPostBack)
             {
                 Clear();
+                if(!String.IsNullOrEmpty(Request.Query String["id"]))
+                {
+                    int userID = Convert.ToInt32(Request.QueryString["id"]);
+                    using (SqlConnection sqlCon = new SqlConnection(connectionString))
+                    {
+                        sqlCon.Open();
+                        SqlDataAdapter sqlDa = new SqlDataAdapter("UserViewByyID", sqlCon);
+                        sqlDa.SelectCommand.CommandType = CommandType.StoredProcedure;
+                        sqlDa.SelectCommand.Parameters.AddWithValue("@UserID,userID");
+                        DataTable dtbl = new DataTable();
+                        sqlDa.Fill(dtbl);
+                        hfUserID.Value = userID.ToString();
+                        txtFirstName.Text = dtbl.Rows[0][1].ToString();
+                        txtLastName.Text = dtbl.Rows[0][2].ToString();
+                        txtContact.Text = dtbl.Rows[0][3].ToString();
+                        ddlGender.Items.FindByValue(dtbl.Rows[0][4].ToString()).Selected = true;
+                        txtAddress.Text = dtbl.Rows[0][5].ToString();
+                        txtUsername.Text = dtbl.Rows[0][6].ToString();
+                        txtPassword.Text = dtbl.Rows[0][7].ToString();
+                        txtPassword.Attributes.Add("value", dtbl.Rows[0][7].ToString());
+                        txtConfirmPassword.Text = dtbl.Rows[0][7].ToString();
+                        txtConfirmPassword.Attributes.Add("value", dtbl.Rows[0][7].ToString());
+
+                    }
+                }
             }
         }
 
